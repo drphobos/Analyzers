@@ -8,6 +8,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using Microsoft.CodeAnalysis.Text;
 
 namespace DogmaSolutions.Analyzers
 {
@@ -236,6 +237,29 @@ namespace DogmaSolutions.Analyzers
             }
 
             return DefaultExcludedBaseTypes;
+        }
+
+        internal static int CountNonBlankLines(SourceText text)
+        {
+            var count = 0;
+            foreach (var line in text.Lines)
+            {
+                var span = line.Span;
+                var isBlank = true;
+                for (var i = span.Start; i < span.End; i++)
+                {
+                    if (!char.IsWhiteSpace(text[i]))
+                    {
+                        isBlank = false;
+                        break;
+                    }
+                }
+
+                if (!isBlank)
+                    count++;
+            }
+
+            return count;
         }
 
         internal static List<BaseTypeDeclarationSyntax> GetTopLevelTypeDeclarations(SyntaxNode root)

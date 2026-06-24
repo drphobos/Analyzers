@@ -52,6 +52,7 @@ public class DSA033CodeFixTests
 root = true
 [*]
 dotnet_diagnostic.DSA033.max_lines = 10
+dotnet_diagnostic.DSA033.count_blank_lines = true
 "));
       test.ExpectedDiagnostics.Add(
          CSharpCodeFixVerifier<DSA033Analyzer, DSA033CodeFixProvider>.Diagnostic(DSA033Analyzer.DiagnosticId)
@@ -65,6 +66,7 @@ dotnet_diagnostic.DSA033.max_lines = 10
 root = true
 [*]
 dotnet_diagnostic.DSA033.max_lines = 10
+dotnet_diagnostic.DSA033.count_blank_lines = true
 "));
 
       await test.RunAsync().ConfigureAwait(false);
@@ -129,6 +131,7 @@ dotnet_diagnostic.DSA033.max_lines = 10
 root = true
 [*]
 dotnet_diagnostic.DSA033.max_lines = 10
+dotnet_diagnostic.DSA033.count_blank_lines = true
 "));
       test.ExpectedDiagnostics.Add(
          CSharpCodeFixVerifier<DSA033Analyzer, DSA033CodeFixProvider>.Diagnostic(DSA033Analyzer.DiagnosticId)
@@ -143,6 +146,7 @@ dotnet_diagnostic.DSA033.max_lines = 10
 root = true
 [*]
 dotnet_diagnostic.DSA033.max_lines = 10
+dotnet_diagnostic.DSA033.count_blank_lines = true
 "));
 
       await test.RunAsync().ConfigureAwait(false);
@@ -232,6 +236,7 @@ namespace TestApp
 root = true
 [*]
 dotnet_diagnostic.DSA033.max_lines = 12
+dotnet_diagnostic.DSA033.count_blank_lines = true
 "));
       test.ExpectedDiagnostics.Add(
          CSharpCodeFixVerifier<DSA033Analyzer, DSA033CodeFixProvider>.Diagnostic(DSA033Analyzer.DiagnosticId)
@@ -245,6 +250,7 @@ dotnet_diagnostic.DSA033.max_lines = 12
 root = true
 [*]
 dotnet_diagnostic.DSA033.max_lines = 12
+dotnet_diagnostic.DSA033.count_blank_lines = true
 "));
 
       await test.RunAsync().ConfigureAwait(false);
@@ -261,6 +267,7 @@ dotnet_diagnostic.DSA033.max_lines = 12
 root = true
 [*]
 dotnet_diagnostic.DSA033.max_lines = 10
+dotnet_diagnostic.DSA033.count_blank_lines = true
 ";
       var source = @"namespace TestApp
 {
@@ -319,6 +326,7 @@ dotnet_diagnostic.DSA033.max_lines = 10
 root = true
 [*]
 dotnet_diagnostic.DSA033.max_lines = 5
+dotnet_diagnostic.DSA033.count_blank_lines = true
 ";
       var source = @"namespace TestApp
 {
@@ -364,6 +372,7 @@ dotnet_diagnostic.DSA033.max_lines = 5
 root = true
 [*]
 dotnet_diagnostic.DSA033.max_lines = 10
+dotnet_diagnostic.DSA033.count_blank_lines = true
 ";
       var source = @"namespace TestApp
 {
@@ -424,6 +433,7 @@ dotnet_diagnostic.DSA033.max_lines = 10
 root = true
 [*]
 dotnet_diagnostic.DSA033.max_lines = 7
+dotnet_diagnostic.DSA033.count_blank_lines = true
 ";
       var source = @"namespace TestApp;
 
@@ -477,6 +487,7 @@ public class Beta
 root = true
 [*]
 dotnet_diagnostic.DSA033.max_lines = 5
+dotnet_diagnostic.DSA033.count_blank_lines = true
 ";
       var source = @"public class {|#0:Alpha|}
 {
@@ -529,6 +540,7 @@ public class Beta
 root = true
 [*]
 dotnet_diagnostic.DSA033.max_lines = 10
+dotnet_diagnostic.DSA033.count_blank_lines = true
 ";
       var source = @"using System;
 
@@ -591,6 +603,7 @@ namespace TestApp
 root = true
 [*]
 dotnet_diagnostic.DSA033.max_lines = 10
+dotnet_diagnostic.DSA033.count_blank_lines = true
 ";
       var source = @"namespace TestApp
 {

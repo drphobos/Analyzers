@@ -16,6 +16,7 @@ public partial class DSA034CodeFixTests
 root = true
 [*]
 dotnet_diagnostic.DSA034.max_lines = 13
+dotnet_diagnostic.DSA034.count_blank_lines = true
 ";
       // "LoadFactories" → normalize → ["Load"(excl),"Factory"] → ["Factory"]
       // "BuildFactory" → ["Build","Factory"] → ["Build","Factory"]
@@ -119,6 +120,7 @@ dotnet_diagnostic.DSA034.max_lines = 13
 root = true
 [*]
 dotnet_diagnostic.DSA034.max_lines = 17
+dotnet_diagnostic.DSA034.count_blank_lines = true
 dotnet_diagnostic.DSA034.max_topics = 3
 ";
       // Tag(3) and Zone(3) tie; Zone matches first in word order, so Tag gets 0 members.
@@ -241,6 +243,7 @@ dotnet_diagnostic.DSA034.max_topics = 3
 root = true
 [*]
 dotnet_diagnostic.DSA034.max_lines = 17
+dotnet_diagnostic.DSA034.count_blank_lines = true
 dotnet_diagnostic.DSA034.max_topics = 3
 ";
       // Freq: Orbit(3), Flare(3), Ring(2). max_topics=3: Orbit, Flare, Ring.
@@ -357,6 +360,7 @@ dotnet_diagnostic.DSA034.max_topics = 3
 root = true
 [*]
 dotnet_diagnostic.DSA034.max_lines = 17
+dotnet_diagnostic.DSA034.count_blank_lines = true
 dotnet_diagnostic.DSA034.max_topics = 4
 ";
       // Coin(3), Seal(3), Stamp(3) all share members; Coin matches first in word order.
@@ -468,6 +472,7 @@ dotnet_diagnostic.DSA034.max_topics = 4
 root = true
 [*]
 dotnet_diagnostic.DSA034.max_lines = 13
+dotnet_diagnostic.DSA034.count_blank_lines = true
 dotnet_diagnostic.DSA034.max_topics = 5
 dotnet_diagnostic.DSA034.excluded_topic_words = Load,Save,Check,Get,Set,Process
 ";

@@ -16,6 +16,7 @@ public partial class DSA034CodeFixTests
 root = true
 [*]
 dotnet_diagnostic.DSA034.max_lines = 15
+dotnet_diagnostic.DSA034.count_blank_lines = true
 ";
       // 16 lines, threshold 15. Topic "Order" has only 1 property (OrderLabel) → not viable → demoted.
       // "Cache" has 2 methods + 1 field → viable. "Sync" is excluded from topic words.
@@ -103,6 +104,7 @@ dotnet_diagnostic.DSA034.max_lines = 15
 root = true
 [*]
 dotnet_diagnostic.DSA034.max_lines = 15
+dotnet_diagnostic.DSA034.count_blank_lines = true
 ";
       // 16 lines, threshold 15. Topic "Order" has only 1 event field (OrderChanged) → not viable → demoted.
       // "Cache" has 2 methods + 1 field → viable. "Sync" is excluded from topic words.
@@ -191,6 +193,7 @@ dotnet_diagnostic.DSA034.max_lines = 15
 root = true
 [*]
 dotnet_diagnostic.DSA034.max_lines = 13
+dotnet_diagnostic.DSA034.count_blank_lines = true
 ";
       // 14 lines, threshold 13. Topic "Order" has 1 field + 1 property → viable (case B: 2 non-methods).
       var source = @"namespace TestApp
@@ -282,6 +285,7 @@ dotnet_diagnostic.DSA034.max_lines = 13
 root = true
 [*]
 dotnet_diagnostic.DSA034.max_lines = 16
+dotnet_diagnostic.DSA034.count_blank_lines = true
 ";
       // 17 lines, threshold 16. Topics "Order" (1 field) and "Alert" (1 field) both non-viable → demoted.
       // "Cache" has 2 methods + 1 field → viable. "Sync" excluded from topic words.
@@ -374,6 +378,7 @@ dotnet_diagnostic.DSA034.max_lines = 16
 root = true
 [*]
 dotnet_diagnostic.DSA034.max_lines = 10
+dotnet_diagnostic.DSA034.count_blank_lines = true
 ";
       var source = @"namespace TestApp
 {
@@ -450,6 +455,7 @@ dotnet_diagnostic.DSA034.max_lines = 10
 root = true
 [*]
 dotnet_diagnostic.DSA034.max_lines = 10
+dotnet_diagnostic.DSA034.count_blank_lines = true
 ";
       var source = @"namespace TestApp
 {
@@ -523,6 +529,7 @@ dotnet_diagnostic.DSA034.max_lines = 10
 root = true
 [*]
 dotnet_diagnostic.DSA034.max_lines = 10
+dotnet_diagnostic.DSA034.count_blank_lines = true
 ";
       var source = @"namespace TestApp
 {
@@ -583,6 +590,7 @@ dotnet_diagnostic.DSA034.max_lines = 10
 root = true
 [*]
 dotnet_diagnostic.DSA034.max_lines = 5
+dotnet_diagnostic.DSA034.count_blank_lines = true
 ";
       var source = @"namespace TestApp
 {

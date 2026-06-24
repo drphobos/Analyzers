@@ -16,6 +16,7 @@ public partial class DSA034CodeFixTests
 root = true
 [*]
 dotnet_diagnostic.DSA034.max_lines = 14
+dotnet_diagnostic.DSA034.count_blank_lines = true
 ";
       // Topics: Axis(3) from _axisCount, ScaleAxis, ResetAxis.
       // X, Y fields have no PascalCase words of length > 1, so they go to Misc.
@@ -98,6 +99,7 @@ dotnet_diagnostic.DSA034.max_lines = 14
 root = true
 [*]
 dotnet_diagnostic.DSA034.max_lines = 11
+dotnet_diagnostic.DSA034.count_blank_lines = true
 ";
       var source = @"namespace TestApp;
 
@@ -183,6 +185,7 @@ public partial class MyDispatcher
 root = true
 [*]
 dotnet_diagnostic.DSA034.max_lines = 12
+dotnet_diagnostic.DSA034.count_blank_lines = true
 ";
       var source = @"namespace TestApp
 {
@@ -257,6 +260,7 @@ dotnet_diagnostic.DSA034.max_lines = 12
 root = true
 [*]
 dotnet_diagnostic.DSA034.max_lines = 13
+dotnet_diagnostic.DSA034.count_blank_lines = true
 ";
       // 14 lines, threshold 13. Ctors file gets base list (: ServiceBase).
       // Topics: Order(2), Cache(2). Alpha, Beta → Misc.
@@ -363,6 +367,7 @@ dotnet_diagnostic.DSA034.max_lines = 13
 root = true
 [*]
 dotnet_diagnostic.DSA034.max_lines = 13
+dotnet_diagnostic.DSA034.count_blank_lines = true
 ";
       // Member names use underscores: e.g. Check_Quota, Verify_Quota.
       // Underscore splitting produces ["Check"(excl),"Quota"] and ["Verify"(excl),"Quota"] → Quota(2).
@@ -463,6 +468,7 @@ dotnet_diagnostic.DSA034.max_lines = 13
 root = true
 [*]
 dotnet_diagnostic.DSA034.max_lines = 13
+dotnet_diagnostic.DSA034.count_blank_lines = true
 ";
       // Trailing underscores on member names should not produce empty words or ugly topic names.
       // "LoadWidget_" → ["Load","Widget"] (Load excluded → word is "Widget").
@@ -565,6 +571,7 @@ dotnet_diagnostic.DSA034.max_lines = 13
 root = true
 [*]
 dotnet_diagnostic.DSA034.max_lines = 13
+dotnet_diagnostic.DSA034.count_blank_lines = true
 ";
       // "Orders" normalizes to "Order", merging with "ImportOrder" → Order(2).
       // "Widgets" normalizes to "Widget", merging with "PaintWidget" → Widget(2).
@@ -662,6 +669,7 @@ dotnet_diagnostic.DSA034.max_lines = 13
 root = true
 [*]
 dotnet_diagnostic.DSA034.max_lines = 13
+dotnet_diagnostic.DSA034.count_blank_lines = true
 ";
       // "Reads" normalizes to "Read" which is in the excluded list → filtered out.
       // "Writes" normalizes to "Write" which is in the excluded list → filtered out.

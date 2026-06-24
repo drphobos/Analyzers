@@ -59,6 +59,7 @@ namespace TestApp
 root = true
 [*]
 dotnet_diagnostic.DSA034.max_lines = 5
+dotnet_diagnostic.DSA034.count_blank_lines = true
 "));
       test.ExpectedDiagnostics.Add(
          CSharpAnalyzerVerifier<DSA034Analyzer>.Diagnostic(DSA034Analyzer.DiagnosticId)
@@ -114,6 +115,7 @@ namespace TestApp
 root = true
 [*]
 dotnet_diagnostic.DSA034.max_lines = 5
+dotnet_diagnostic.DSA034.count_blank_lines = true
 "));
       await test.RunAsync().ConfigureAwait(false);
    }
@@ -155,6 +157,7 @@ namespace TestApp
 root = true
 [*]
 dotnet_diagnostic.DSA034.max_lines = -1
+dotnet_diagnostic.DSA034.count_blank_lines = true
 "));
       await test.RunAsync().ConfigureAwait(false);
    }
@@ -178,6 +181,7 @@ namespace TestApp
 root = true
 [*]
 dotnet_diagnostic.DSA034.max_lines = abc
+dotnet_diagnostic.DSA034.count_blank_lines = true
 "));
       await test.RunAsync().ConfigureAwait(false);
    }
@@ -201,6 +205,7 @@ namespace TestApp
 root = true
 [*]
 dotnet_diagnostic.DSA034.max_lines = 0
+dotnet_diagnostic.DSA034.count_blank_lines = true
 "));
       await test.RunAsync().ConfigureAwait(false);
    }
@@ -216,6 +221,7 @@ dotnet_diagnostic.DSA034.max_lines = 0
 root = true
 [*]
 dotnet_diagnostic.DSA034.max_lines = 5
+dotnet_diagnostic.DSA034.count_blank_lines = true
 ";
       var source = @"namespace TestApp
 {
@@ -247,6 +253,7 @@ dotnet_diagnostic.DSA034.max_lines = 5
 root = true
 [*]
 dotnet_diagnostic.DSA034.max_lines = 5
+dotnet_diagnostic.DSA034.count_blank_lines = true
 ";
       var source = @"namespace TestApp
 {
@@ -278,6 +285,7 @@ dotnet_diagnostic.DSA034.max_lines = 5
 root = true
 [*]
 dotnet_diagnostic.DSA034.max_lines = 5
+dotnet_diagnostic.DSA034.count_blank_lines = true
 ";
       var source = @"namespace TestApp
 {
@@ -309,6 +317,7 @@ dotnet_diagnostic.DSA034.max_lines = 5
 root = true
 [*]
 dotnet_diagnostic.DSA034.max_lines = 5
+dotnet_diagnostic.DSA034.count_blank_lines = true
 ";
       var source = @"namespace TestApp
 {
@@ -347,6 +356,7 @@ dotnet_diagnostic.DSA034.max_lines = 5
 root = true
 [*]
 dotnet_diagnostic.DSA034.max_lines = 5
+dotnet_diagnostic.DSA034.count_blank_lines = true
 ";
       var source = @"namespace TestApp;
 
@@ -377,6 +387,7 @@ public class MyService
 root = true
 [*]
 dotnet_diagnostic.DSA034.max_lines = 5
+dotnet_diagnostic.DSA034.count_blank_lines = true
 ";
       var source = @"public class MyService
 {
@@ -444,6 +455,7 @@ namespace TestApp
 root = true
 [*]
 dotnet_diagnostic.DSA034.max_lines = 10
+dotnet_diagnostic.DSA034.count_blank_lines = true
 dotnet_diagnostic.DSA034.excluded_file_patterns = *.auto.cs
 "));
       await test.RunAsync().ConfigureAwait(false);
@@ -472,6 +484,7 @@ namespace TestApp
 root = true
 [*]
 dotnet_diagnostic.DSA034.max_lines = 10
+dotnet_diagnostic.DSA034.count_blank_lines = true
 dotnet_diagnostic.DSA034.excluded_file_patterns = *.auto.cs, *.special.cs, *.tmp.cs
 "));
       await test.RunAsync().ConfigureAwait(false);
@@ -524,6 +537,7 @@ dotnet_diagnostic.DSA034.excluded_base_types = System.Exception
 root = true
 [*]
 dotnet_diagnostic.DSA034.excluded_base_types = System.NotImplementedException
+dotnet_diagnostic.DSA034.count_blank_lines = true
 "));
       test.ExpectedDiagnostics.Add(
          CSharpAnalyzerVerifier<DSA034Analyzer>.Diagnostic(DSA034Analyzer.DiagnosticId)
@@ -602,6 +616,7 @@ public class MyFaultHandler : System.Exception
 root = true
 [*]
 dotnet_diagnostic.DSA034.max_lines = 10
+dotnet_diagnostic.DSA034.count_blank_lines = true
 dotnet_diagnostic.DSA034.excluded_base_types = System.IO.IOException, System.Exception
 "));
       await test.RunAsync().ConfigureAwait(false);
@@ -630,7 +645,9 @@ public interface IMyContract
 root = true
 [*]
 dotnet_diagnostic.DSA034.max_lines = 10
+dotnet_diagnostic.DSA034.count_blank_lines = true
 dotnet_diagnostic.DSA034.excluded_base_types = System.Exception
+dotnet_diagnostic.DSA034.count_blank_lines = true
 "));
       test.ExpectedDiagnostics.Add(
          CSharpAnalyzerVerifier<DSA034Analyzer>.Diagnostic(DSA034Analyzer.DiagnosticId)
@@ -662,7 +679,9 @@ public struct MyDataPoint
 root = true
 [*]
 dotnet_diagnostic.DSA034.max_lines = 10
+dotnet_diagnostic.DSA034.count_blank_lines = true
 dotnet_diagnostic.DSA034.excluded_base_types = System.Exception
+dotnet_diagnostic.DSA034.count_blank_lines = true
 "));
       test.ExpectedDiagnostics.Add(
          CSharpAnalyzerVerifier<DSA034Analyzer>.Diagnostic(DSA034Analyzer.DiagnosticId)
@@ -727,6 +746,7 @@ public class MyReportGenerator
 root = true
 [*]
 dotnet_diagnostic.DSA034.max_lines = 10
+dotnet_diagnostic.DSA034.count_blank_lines = true
 dotnet_diagnostic.DSA034.excluded_file_patterns = *.special.cs
 dotnet_diagnostic.DSA034.excluded_base_types = System.Exception
 "));
@@ -756,6 +776,7 @@ public class MyFaultHandler : System.Exception
 root = true
 [*]
 dotnet_diagnostic.DSA034.max_lines = 10
+dotnet_diagnostic.DSA034.count_blank_lines = true
 dotnet_diagnostic.DSA034.excluded_file_patterns = *.auto.cs
 dotnet_diagnostic.DSA034.excluded_base_types = System.Exception
 "));
@@ -786,6 +807,7 @@ public class MyFaultHandler : System.Exception
 root = true
 [*]
 dotnet_diagnostic.DSA034.max_lines = 10
+dotnet_diagnostic.DSA034.count_blank_lines = true
 dotnet_diagnostic.DSA034.excluded_file_patterns = *.auto.cs
 dotnet_diagnostic.DSA034.excluded_base_types = System.NotImplementedException
 "));
@@ -793,6 +815,143 @@ dotnet_diagnostic.DSA034.excluded_base_types = System.NotImplementedException
          CSharpAnalyzerVerifier<DSA034Analyzer>.Diagnostic(DSA034Analyzer.DiagnosticId)
             .WithSpan(1, 1, 1, 1)
             .WithArguments("Test0.cs", 12, 10));
+      await test.RunAsync().ConfigureAwait(false);
+   }
+
+   #endregion
+
+   #region Blank line counting
+
+   [TestMethod]
+   public async Task DoesNotFlag_BlankLinesExcludedByDefault()
+   {
+      // 15 total lines, 9 non-blank. Threshold = 10. Should not flag (9 <= 10).
+      var source = @"namespace TestApp
+{
+    public class MyWidget
+    {
+        public int Alpha { get; set; }
+
+        public int Beta { get; set; }
+
+        public int Gamma { get; set; }
+
+
+
+
+    }
+}";
+
+      var test = new CSharpAnalyzerVerifier<DSA034Analyzer>.Test();
+      test.TestCode = source;
+      test.ReferenceAssemblies = ReferenceAssemblies.Net.Net80;
+      test.TestState.AnalyzerConfigFiles.Add(("/.editorconfig", @"
+root = true
+[*]
+dotnet_diagnostic.DSA034.max_lines = 10
+"));
+      await test.RunAsync().ConfigureAwait(false);
+   }
+
+   [TestMethod]
+   public async Task Flags_BlankLinesCountedWhenEnabled()
+   {
+      // 15 total lines, threshold = 10. With count_blank_lines = true, 15 > 10 → flags.
+      var source = @"namespace TestApp
+{
+    public class MyWidget
+    {
+        public int Alpha { get; set; }
+
+        public int Beta { get; set; }
+
+        public int Gamma { get; set; }
+
+
+
+
+    }
+}";
+
+      var test = new CSharpAnalyzerVerifier<DSA034Analyzer>.Test();
+      test.TestCode = source;
+      test.ReferenceAssemblies = ReferenceAssemblies.Net.Net80;
+      test.TestBehaviors = TestBehaviors.SkipSuppressionCheck;
+      test.TestState.AnalyzerConfigFiles.Add(("/.editorconfig", @"
+root = true
+[*]
+dotnet_diagnostic.DSA034.max_lines = 10
+dotnet_diagnostic.DSA034.count_blank_lines = true
+"));
+      test.ExpectedDiagnostics.Add(
+         CSharpAnalyzerVerifier<DSA034Analyzer>.Diagnostic(DSA034Analyzer.DiagnosticId)
+            .WithSpan(1, 1, 1, 18)
+            .WithArguments("Test0.cs", 15, 10));
+      await test.RunAsync().ConfigureAwait(false);
+   }
+
+   [TestMethod]
+   public async Task Flags_NonBlankLinesExceedThreshold_BlankLinesExcluded()
+   {
+      // 12 total lines, 11 non-blank, threshold = 10. Default (no blank) → 11 > 10 → flags.
+      var source = @"namespace TestApp
+{
+    public class MyWidget
+    {
+        public int Alpha { get; set; }
+        public int Beta { get; set; }
+        public int Gamma { get; set; }
+        public int Delta { get; set; }
+
+        public int Epsilon { get; set; }
+    }
+}";
+
+      var test = new CSharpAnalyzerVerifier<DSA034Analyzer>.Test();
+      test.TestCode = source;
+      test.ReferenceAssemblies = ReferenceAssemblies.Net.Net80;
+      test.TestBehaviors = TestBehaviors.SkipSuppressionCheck;
+      test.TestState.AnalyzerConfigFiles.Add(("/.editorconfig", @"
+root = true
+[*]
+dotnet_diagnostic.DSA034.max_lines = 10
+"));
+      test.ExpectedDiagnostics.Add(
+         CSharpAnalyzerVerifier<DSA034Analyzer>.Diagnostic(DSA034Analyzer.DiagnosticId)
+            .WithSpan(1, 1, 1, 18)
+            .WithArguments("Test0.cs", 11, 10));
+      await test.RunAsync().ConfigureAwait(false);
+   }
+
+   [TestMethod]
+   public async Task DoesNotFlag_InvalidCountBlankLinesUsesDefault()
+   {
+      // Invalid boolean falls back to default (false). 15 total, 9 non-blank, threshold = 10. No flag.
+      var source = @"namespace TestApp
+{
+    public class MyWidget
+    {
+        public int Alpha { get; set; }
+
+        public int Beta { get; set; }
+
+        public int Gamma { get; set; }
+
+
+
+
+    }
+}";
+
+      var test = new CSharpAnalyzerVerifier<DSA034Analyzer>.Test();
+      test.TestCode = source;
+      test.ReferenceAssemblies = ReferenceAssemblies.Net.Net80;
+      test.TestState.AnalyzerConfigFiles.Add(("/.editorconfig", @"
+root = true
+[*]
+dotnet_diagnostic.DSA034.max_lines = 10
+dotnet_diagnostic.DSA034.count_blank_lines = maybe
+"));
       await test.RunAsync().ConfigureAwait(false);
    }
 

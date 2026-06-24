@@ -17,6 +17,7 @@ public partial class DSA034CodeFixTests
 root = true
 [*]
 dotnet_diagnostic.DSA034.max_lines = 15
+dotnet_diagnostic.DSA034.count_blank_lines = true
 ";
       var source = @"using System;
 
@@ -155,6 +156,7 @@ namespace TestApp
 root = true
 [*]
 dotnet_diagnostic.DSA034.max_lines = 12
+dotnet_diagnostic.DSA034.count_blank_lines = true
 ";
       var source = @"namespace TestApp
 {
@@ -231,6 +233,7 @@ dotnet_diagnostic.DSA034.max_lines = 12
 root = true
 [*]
 dotnet_diagnostic.DSA034.max_lines = 13
+dotnet_diagnostic.DSA034.count_blank_lines = true
 ";
 
       // Topics: Order(2), Permission(2), Cache(2), Alert(2). Shutdown/Restart → Misc.
@@ -362,6 +365,7 @@ dotnet_diagnostic.DSA034.max_lines = 13
 root = true
 [*]
 dotnet_diagnostic.DSA034.max_lines = 15
+dotnet_diagnostic.DSA034.count_blank_lines = true
 ";
       // Topics: Order(2), Signal(2). Shutdown/Restart → no topic match → Misc.
       // Note: "Emit" is an excluded word, so EmitSignal only contributes "Signal".
@@ -461,6 +465,7 @@ dotnet_diagnostic.DSA034.max_lines = 15
 root = true
 [*]
 dotnet_diagnostic.DSA034.max_lines = 15
+dotnet_diagnostic.DSA034.count_blank_lines = true
 ";
       var source = @"namespace TestApp
 {
@@ -562,6 +567,7 @@ dotnet_diagnostic.DSA034.max_lines = 15
 root = true
 [*]
 dotnet_diagnostic.DSA034.max_lines = 15
+dotnet_diagnostic.DSA034.count_blank_lines = true
 ";
       // 16 lines, threshold 15. Topic "Order" has only 1 field (_orderCount) → not viable → demoted.
       // "Cache" has 2 methods + 1 field → viable. "Sync" is excluded from topic words.
@@ -649,6 +655,7 @@ dotnet_diagnostic.DSA034.max_lines = 15
 root = true
 [*]
 dotnet_diagnostic.DSA034.max_lines = 13
+dotnet_diagnostic.DSA034.count_blank_lines = true
 ";
       // 14 lines, threshold 13. Topic "Order" has 2 fields → viable (2 non-method items).
       var source = @"namespace TestApp

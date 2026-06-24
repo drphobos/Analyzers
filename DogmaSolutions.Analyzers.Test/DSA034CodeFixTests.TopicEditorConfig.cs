@@ -16,6 +16,7 @@ public partial class DSA034CodeFixTests
 root = true
 [*]
 dotnet_diagnostic.DSA034.max_lines = 10
+dotnet_diagnostic.DSA034.count_blank_lines = true
 ";
       // 12 lines, threshold 10. DisposeAsync → IsDisposeMethod → Ctors.
       var source = @"namespace TestApp
@@ -91,6 +92,7 @@ dotnet_diagnostic.DSA034.max_lines = 10
 root = true
 [*]
 dotnet_diagnostic.DSA034.max_lines = 10
+dotnet_diagnostic.DSA034.count_blank_lines = true
 ";
       // 12 lines, threshold 10. Already partial → EnsurePartialModifier returns same list.
       var source = @"namespace TestApp
@@ -165,6 +167,7 @@ dotnet_diagnostic.DSA034.max_lines = 10
 root = true
 [*]
 dotnet_diagnostic.DSA034.max_lines = 10
+dotnet_diagnostic.DSA034.count_blank_lines = true
 ";
       // 11 lines, threshold 10 → fires. No namespace, no usings.
       var source = @"public class {|#0:MyBroker|}
@@ -246,6 +249,7 @@ dotnet_diagnostic.DSA034.max_lines = 10
 root = true
 [*]
 dotnet_diagnostic.DSA034.max_lines = 13
+dotnet_diagnostic.DSA034.count_blank_lines = true
 ";
       // 14 lines, threshold 13. Destructor → IsCtorsGroupMemberForTopic → Ctors.
       var source = @"namespace TestApp
@@ -342,6 +346,7 @@ dotnet_diagnostic.DSA034.max_lines = 13
 root = true
 [*]
 dotnet_diagnostic.DSA034.max_lines = 13
+dotnet_diagnostic.DSA034.count_blank_lines = true
 ";
       // 14 lines, threshold 13. Dispose → IsCtorsGroupMemberForTopic → Ctors.
       var source = @"namespace TestApp
@@ -438,6 +443,7 @@ dotnet_diagnostic.DSA034.max_lines = 13
 root = true
 [*]
 dotnet_diagnostic.DSA034.max_lines = 10
+dotnet_diagnostic.DSA034.count_blank_lines = true
 ";
       // 11 lines, threshold 10. Interface — no constructor possible.
       // No Ctors file since interface has no ctor/dtor/Dispose.
@@ -498,6 +504,7 @@ dotnet_diagnostic.DSA034.max_lines = 10
 root = true
 [*]
 dotnet_diagnostic.DSA034.max_lines = 13
+dotnet_diagnostic.DSA034.count_blank_lines = true
 ";
       // 14 lines, threshold 13. Record with constructor.
       var source = @"namespace TestApp
@@ -595,6 +602,7 @@ dotnet_diagnostic.DSA034.max_lines = 13
 root = true
 [*]
 dotnet_diagnostic.DSA034.max_lines = 14
+dotnet_diagnostic.DSA034.count_blank_lines = true
 ";
       // 16 lines, threshold 14. Nested enum gets own file.
       var source = @"namespace TestApp
@@ -706,6 +714,7 @@ dotnet_diagnostic.DSA034.max_lines = 14
 root = true
 [*]
 dotnet_diagnostic.DSA034.max_lines = 13
+dotnet_diagnostic.DSA034.count_blank_lines = true
 ";
       // 15 lines, threshold 13. Event field is NOT in IsCtorsGroupMemberForTopic,
       // so it flows into topic classification. "OrderChanged" → ["Order", "Changed"].

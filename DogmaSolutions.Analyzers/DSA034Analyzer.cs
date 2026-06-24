@@ -13,6 +13,8 @@ public sealed class DSA034Analyzer : DiagnosticAnalyzer
     public const string DiagnosticId = "DSA034";
     internal const string MaxLinesOptionKey = "dotnet_diagnostic.DSA034.max_lines";
     internal const int DefaultMaxLines = 500;
+    internal const string CountBlankLinesOptionKey = "dotnet_diagnostic.DSA034.count_blank_lines";
+    internal const bool DefaultCountBlankLines = false;
     internal const string ExcludedFilePatternsOptionKey = "dotnet_diagnostic.DSA034.excluded_file_patterns";
     internal const string ExcludedBaseTypesOptionKey = "dotnet_diagnostic.DSA034.excluded_base_types";
 
@@ -52,7 +54,17 @@ public sealed class DSA034Analyzer : DiagnosticAnalyzer
 
         // 2. Line count
         var text = context.Tree.GetText(context.CancellationToken);
-        var lineCount = text.Lines.Count;
+
+        var countBlankLines = DefaultCountBlankLines;
+        if (options.TryGetValue(CountBlankLinesOptionKey, out var blankVal) &&
+            bool.TryParse(blankVal, out var blankParsed))
+        {
+            countBlankLines = blankParsed;
+        }
+
+        var lineCount = countBlankLines
+            ? text.Lines.Count
+            : AnalyzersUtils.CountNonBlankLines(text);
         var maxLines = DefaultMaxLines;
         if (options.TryGetValue(MaxLinesOptionKey, out var value) &&
             int.TryParse(value, out var parsed) && parsed > 0)

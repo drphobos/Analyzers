@@ -18,6 +18,7 @@ public partial class DSA034CodeFixTests
 root = true
 [*]
 dotnet_diagnostic.DSA034.max_lines = 10
+dotnet_diagnostic.DSA034.count_blank_lines = true
 ";
       var source = @"namespace TestApp;
 
@@ -94,6 +95,7 @@ public partial class MyGateway
 root = true
 [*]
 dotnet_diagnostic.DSA034.max_lines = 13
+dotnet_diagnostic.DSA034.count_blank_lines = true
 ";
       var source = @"using System;
 
@@ -186,6 +188,7 @@ namespace TestApp
 root = true
 [*]
 dotnet_diagnostic.DSA034.max_lines = 10
+dotnet_diagnostic.DSA034.count_blank_lines = true
 ";
       var source = @"namespace TestApp
 {
@@ -266,6 +269,7 @@ dotnet_diagnostic.DSA034.max_lines = 10
 root = true
 [*]
 dotnet_diagnostic.DSA034.max_lines = 10
+dotnet_diagnostic.DSA034.count_blank_lines = true
 ";
       // Source has 13 lines (> threshold 10). Each split file has at most 10 lines (<= 10).
       // Padded with blank lines so source exceeds threshold while split files stay small.
@@ -342,6 +346,7 @@ dotnet_diagnostic.DSA034.max_lines = 10
 root = true
 [*]
 dotnet_diagnostic.DSA034.max_lines = 13
+dotnet_diagnostic.DSA034.count_blank_lines = true
 dotnet_diagnostic.DSA034.max_topics = 2
 ";
       // Topics by frequency: Order(2), Cache(2), Signal(2). max_topics=2 → top 2 alphabetically: Cache, Order.
@@ -444,6 +449,7 @@ dotnet_diagnostic.DSA034.max_topics = 2
 root = true
 [*]
 dotnet_diagnostic.DSA034.max_lines = 13
+dotnet_diagnostic.DSA034.count_blank_lines = true
 dotnet_diagnostic.DSA034.excluded_topic_words = Order
 ";
       // Custom exclusion: "Order" is now excluded. Remaining topics: Import(2), Export(2).
@@ -545,6 +551,7 @@ dotnet_diagnostic.DSA034.excluded_topic_words = Order
 root = true
 [*]
 dotnet_diagnostic.DSA034.max_lines = 14
+dotnet_diagnostic.DSA034.count_blank_lines = true
 ";
       // All single-word methods — no word has frequency >= 2, so no topics. All go to Misc.
       // Source is padded with blank lines so it exceeds threshold (17 > 14).
@@ -616,6 +623,7 @@ dotnet_diagnostic.DSA034.max_lines = 14
 root = true
 [*]
 dotnet_diagnostic.DSA034.max_lines = 8
+dotnet_diagnostic.DSA034.count_blank_lines = true
 ";
       // 9 lines, threshold 8 → fires. No namespace, no usings.
       var source = @"public class {|#0:MyThing|}
@@ -676,6 +684,7 @@ dotnet_diagnostic.DSA034.max_lines = 8
 root = true
 [*]
 dotnet_diagnostic.DSA034.max_lines = 10
+dotnet_diagnostic.DSA034.count_blank_lines = true
 ";
       // 12 lines, threshold 10. Event field → IsCtorsGroupMember → Ctors.
       var source = @"namespace TestApp
