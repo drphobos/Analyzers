@@ -65,29 +65,28 @@ public partial class DSA034CodeFixProvider : CodeFixProvider
         if (root == null)
             return;
 
-        var topLevelTypes = AnalyzersUtils.GetTopLevelTypeDeclarations(root);
-        if (topLevelTypes.Count != 1)
-            return;
-
-        var typeDecl = topLevelTypes[0];
-        if (typeDecl is not TypeDeclarationSyntax)
-            return;
-
         var diagnostic = context.Diagnostics[0];
+        var node = root.FindNode(diagnostic.Location.SourceSpan);
 
-        context.RegisterCodeFix(
-            CodeAction.Create(
-                title: "Split into partial files by member visibility",
-                createChangedSolution: ct => SplitByVisibilityAsync(context.Document, ct),
-                equivalenceKey: VisibilityEquivalenceKey),
-            diagnostic);
+        var topLevelTypes = AnalyzersUtils.GetTopLevelTypeDeclarations(root);
+        if (topLevelTypes.Count == 1 && topLevelTypes[0] is TypeDeclarationSyntax)
+        {
+            context.RegisterCodeFix(
+                CodeAction.Create(
+                    title: "Split into partial files by member visibility",
+                    createChangedSolution: ct => SplitByVisibilityAsync(context.Document, ct),
+                    equivalenceKey: VisibilityEquivalenceKey),
+                diagnostic);
 
-        context.RegisterCodeFix(
-            CodeAction.Create(
-                title: "Split into partial files by topic",
-                createChangedSolution: ct => SplitByTopicAsync(context.Document, ct),
-                equivalenceKey: TopicEquivalenceKey),
-            diagnostic);
+            context.RegisterCodeFix(
+                CodeAction.Create(
+                    title: "Split into partial files by topic",
+                    createChangedSolution: ct => SplitByTopicAsync(context.Document, ct),
+                    equivalenceKey: TopicEquivalenceKey),
+                diagnostic);
+        }
+
+        ReviewCommentCodeFix.Register(context, diagnostic, node, DSA034Analyzer.DiagnosticId, nameof(Resources.DSA034ReviewComment));
     }
 
     internal static async Task<Solution> SplitByVisibilityAsync(Document document, CancellationToken cancellationToken)

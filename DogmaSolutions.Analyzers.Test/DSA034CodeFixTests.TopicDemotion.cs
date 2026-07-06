@@ -584,7 +584,7 @@ dotnet_diagnostic.DSA034.count_blank_lines = true
    }
 
    [TestMethod]
-   public async Task Visibility_NoFixForSingleEnum()
+   public async Task Visibility_NoSplitFixForSingleEnum()
    {
       var editorConfig = @"
 root = true
@@ -609,6 +609,7 @@ dotnet_diagnostic.DSA034.count_blank_lines = true
       test.ReferenceAssemblies = ReferenceAssemblies.Net.Net80;
       test.TestBehaviors = TestBehaviors.SkipSuppressionCheck;
       test.CodeFixTestBehaviors = CodeFixTestBehaviors.SkipFixAllCheck;
+      test.CodeActionEquivalenceKey = DSA034CodeFixProvider.VisibilityEquivalenceKey;
       test.TestState.AnalyzerConfigFiles.Add(("/.editorconfig", editorConfig));
       test.ExpectedDiagnostics.Add(
          CSharpCodeFixVerifier<DSA034Analyzer, DSA034CodeFixProvider>.Diagnostic(DSA034Analyzer.DiagnosticId)

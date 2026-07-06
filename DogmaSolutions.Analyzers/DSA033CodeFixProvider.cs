@@ -32,18 +32,21 @@ public sealed class DSA033CodeFixProvider : CodeFixProvider
         if (root == null)
             return;
 
-        var topLevelTypes = AnalyzersUtils.GetTopLevelTypeDeclarations(root);
-        if (topLevelTypes.Count < 2)
-            return;
-
         var diagnostic = context.Diagnostics[0];
+        var node = root.FindNode(diagnostic.Location.SourceSpan);
 
-        context.RegisterCodeFix(
-            CodeAction.Create(
-                title: $"Split file into {topLevelTypes.Count} files (one per type)",
-                createChangedSolution: ct => SplitFileAsync(context.Document, ct),
-                equivalenceKey: EquivalenceKey),
-            diagnostic);
+        var topLevelTypes = AnalyzersUtils.GetTopLevelTypeDeclarations(root);
+        if (topLevelTypes.Count >= 2)
+        {
+            context.RegisterCodeFix(
+                CodeAction.Create(
+                    title: $"Split file into {topLevelTypes.Count} files (one per type)",
+                    createChangedSolution: ct => SplitFileAsync(context.Document, ct),
+                    equivalenceKey: EquivalenceKey),
+                diagnostic);
+        }
+
+        ReviewCommentCodeFix.Register(context, diagnostic, node, DSA033Analyzer.DiagnosticId, nameof(Resources.DSA033ReviewComment));
     }
 
     internal static async Task<Solution> SplitFileAsync(Document document, CancellationToken cancellationToken)

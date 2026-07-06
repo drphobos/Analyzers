@@ -157,7 +157,7 @@ dotnet_diagnostic.DSA033.count_blank_lines = true
    #region No fix offered
 
    [TestMethod]
-   public async Task NoFixOffered_SingleTypeInFile()
+   public async Task NoSplitFixOffered_SingleTypeInFile()
    {
       var lines = new string[502];
       lines[0] = "namespace TestApp {";
@@ -174,6 +174,7 @@ dotnet_diagnostic.DSA033.count_blank_lines = true
       test.ReferenceAssemblies = ReferenceAssemblies.Net.Net80;
       test.TestBehaviors = TestBehaviors.SkipSuppressionCheck;
       test.CodeFixTestBehaviors = CodeFixTestBehaviors.SkipFixAllCheck;
+      test.CodeActionEquivalenceKey = DSA033CodeFixProvider.EquivalenceKey;
       test.ExpectedDiagnostics.Add(
          CSharpCodeFixVerifier<DSA033Analyzer, DSA033CodeFixProvider>.Diagnostic(DSA033Analyzer.DiagnosticId)
             .WithSpan(1, 1, 1, 20)
