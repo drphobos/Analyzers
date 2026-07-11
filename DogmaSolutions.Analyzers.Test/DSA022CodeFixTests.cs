@@ -391,7 +391,7 @@ public class DSA022CodeFixTests
     }
 
     [TestMethod]
-    public async Task HoistsLiteralOnlyExpression()
+    public async Task DoesNotFlagLiteralOnlyExpression()
     {
         var source = @"
             namespace TestApp
@@ -402,23 +402,7 @@ public class DSA022CodeFixTests
                     {
                         for (int i = 0; i < arr.Length; i++)
                         {
-                            arr[i] = {|#0:10 * 20|} + i;
-                        }
-                    }
-                }
-            }";
-
-        var fixedSource = @"
-            namespace TestApp
-            {
-                public class MyClass
-                {
-                    public void Test(int[] arr)
-                    {
-                        var hoisted = 10 * 20;
-                        for (int i = 0; i < arr.Length; i++)
-                        {
-                            arr[i] = hoisted + i;
+                            arr[i] = 10 * 20 + i;
                         }
                     }
                 }
@@ -426,11 +410,7 @@ public class DSA022CodeFixTests
 
         var test = new CSharpCodeFixVerifier<DSA022Analyzer, DSA022CodeFixProvider>.Test();
         test.TestCode = source;
-        test.FixedCode = fixedSource;
         test.ReferenceAssemblies = ReferenceAssemblies.Net.Net80;
-        test.ExpectedDiagnostics.Add(
-            CSharpCodeFixVerifier<DSA022Analyzer, DSA022CodeFixProvider>
-                .Diagnostic(DSA022Analyzer.DiagnosticId).WithLocation(0).WithArguments("10 * 20"));
         await test.RunAsync().ConfigureAwait(false);
     }
 

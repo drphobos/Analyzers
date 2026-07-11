@@ -634,6 +634,91 @@ public partial class DSA022Tests
                 }
             }"
         ],
+        [
+            "Literal-only left shift: 1 << 0 not flagged",
+            @"
+            namespace TestApp
+            {
+                public class MyClass
+                {
+                    public void Test(int[] arr)
+                    {
+                        for (int i = 0; i < arr.Length; i++)
+                        {
+                            arr[i] = 1 << 0;
+                        }
+                    }
+                }
+            }"
+        ],
+        [
+            "Parenthesized literals: (10) * (20) not flagged",
+            @"
+            namespace TestApp
+            {
+                public class MyClass
+                {
+                    public void Test(int[] arr)
+                    {
+                        for (int i = 0; i < arr.Length; i++)
+                        {
+                            arr[i] = (10) * (20);
+                        }
+                    }
+                }
+            }"
+        ],
+        [
+            "Unary minus with literal: -1 * 2 not flagged",
+            @"
+            namespace TestApp
+            {
+                public class MyClass
+                {
+                    public void Test(int[] arr)
+                    {
+                        for (int i = 0; i < arr.Length; i++)
+                        {
+                            arr[i] = -1 * 2;
+                        }
+                    }
+                }
+            }"
+        ],
+        [
+            "Chained literal addition: 3 + 4 + 5 not flagged",
+            @"
+            namespace TestApp
+            {
+                public class MyClass
+                {
+                    public void Test(int[] arr)
+                    {
+                        for (int i = 0; i < arr.Length; i++)
+                        {
+                            arr[i] = 3 + 4 + 5;
+                        }
+                    }
+                }
+            }"
+        ],
+        [
+            "Both operands are literals: compile-time constant not flagged",
+            @"
+            namespace TestApp
+            {
+                public class MyClass
+                {
+                    public void Test(int[] arr)
+                    {
+                        for (int i = 0; i < arr.Length; i++)
+                        {
+                            arr[i] = 10 * 20 + i;
+                        }
+                    }
+                }
+            }"
+        ],
     ];
 
     [TestMethod]

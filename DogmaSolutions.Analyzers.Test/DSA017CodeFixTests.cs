@@ -164,8 +164,6 @@ namespace TestApp
 
         var test = new CSharpCodeFixVerifier<DSA017Analyzer, DSA017CodeFixProvider>.Test();
         test.TestCode = source;
-        test.FixedState.InheritanceMode = StateInheritanceMode.AutoInheritAll;
-        test.FixedState.MarkupHandling = MarkupMode.Allow;
         test.ReferenceAssemblies = ReferenceAssemblies.Net.Net80;
         test.ExpectedDiagnostics.Add(
             CSharpCodeFixVerifier<DSA017Analyzer, DSA017CodeFixProvider>
@@ -198,8 +196,6 @@ namespace TestApp
 
         var test = new CSharpCodeFixVerifier<DSA017Analyzer, DSA017CodeFixProvider>.Test();
         test.TestCode = source;
-        test.FixedState.InheritanceMode = StateInheritanceMode.AutoInheritAll;
-        test.FixedState.MarkupHandling = MarkupMode.Allow;
         test.ReferenceAssemblies = ReferenceAssemblies.Net.Net80;
         test.ExpectedDiagnostics.Add(
             CSharpCodeFixVerifier<DSA017Analyzer, DSA017CodeFixProvider>
@@ -233,8 +229,6 @@ namespace TestApp
 
         var test = new CSharpCodeFixVerifier<DSA017Analyzer, DSA017CodeFixProvider>.Test();
         test.TestCode = source;
-        test.FixedState.InheritanceMode = StateInheritanceMode.AutoInheritAll;
-        test.FixedState.MarkupHandling = MarkupMode.Allow;
         test.ReferenceAssemblies = ReferenceAssemblies.Net.Net80;
         test.ExpectedDiagnostics.Add(
             CSharpCodeFixVerifier<DSA017Analyzer, DSA017CodeFixProvider>
@@ -265,8 +259,6 @@ namespace TestApp
 
         var test = new CSharpCodeFixVerifier<DSA017Analyzer, DSA017CodeFixProvider>.Test();
         test.TestCode = source;
-        test.FixedState.InheritanceMode = StateInheritanceMode.AutoInheritAll;
-        test.FixedState.MarkupHandling = MarkupMode.Allow;
         test.ReferenceAssemblies = ReferenceAssemblies.Net.Net80;
         test.ExpectedDiagnostics.Add(
             CSharpCodeFixVerifier<DSA017Analyzer, DSA017CodeFixProvider>

@@ -92,6 +92,9 @@ public sealed class DSA022Analyzer : DiagnosticAnalyzer
             if (!IsInvariant(binExpr, modifiedSymbols, context.SemanticModel))
                 continue;
 
+            if (IsCompileTimeConstant(binExpr))
+                continue;
+
             candidates.Add(binExpr);
         }
 
@@ -311,6 +314,17 @@ public sealed class DSA022Analyzer : DiagnosticAnalyzer
         }
 
         return false;
+    }
+
+    private static bool IsCompileTimeConstant(ExpressionSyntax expr)
+    {
+        foreach (var node in expr.DescendantNodesAndSelf())
+        {
+            if (node is IdentifierNameSyntax)
+                return false;
+        }
+
+        return true;
     }
 
     private static bool IsStringConcatenation(BinaryExpressionSyntax expr, SemanticModel model)

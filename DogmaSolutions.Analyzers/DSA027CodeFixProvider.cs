@@ -31,19 +31,19 @@ public sealed class DSA027CodeFixProvider : CodeFixProvider
         var diagnosticSpan = diagnostic.Location.SourceSpan;
         var node = root.FindNode(diagnosticSpan);
 
-        if (node is not AssignmentExpressionSyntax assignment)
-            return;
-
-        var loop = FindEnclosingLoop(assignment);
-        if (loop?.Parent is not BlockSyntax)
-            return;
-
-        context.RegisterCodeFix(
-            CodeAction.Create(
-                title: "Use StringBuilder",
-                createChangedDocument: ct => ConvertToStringBuilderAsync(context.Document, assignment, ct),
-                equivalenceKey: DSA027Analyzer.DiagnosticId),
-            diagnostic);
+        if (node is AssignmentExpressionSyntax assignment)
+        {
+            var loop = FindEnclosingLoop(assignment);
+            if (loop?.Parent is BlockSyntax)
+            {
+                context.RegisterCodeFix(
+                    CodeAction.Create(
+                        title: "Use StringBuilder",
+                        createChangedDocument: ct => ConvertToStringBuilderAsync(context.Document, assignment, ct),
+                        equivalenceKey: DSA027Analyzer.DiagnosticId),
+                    diagnostic);
+            }
+        }
 
         ReviewCommentCodeFix.Register(context, diagnostic, node, DSA027Analyzer.DiagnosticId, nameof(Resources.DSA027ReviewComment));
     }

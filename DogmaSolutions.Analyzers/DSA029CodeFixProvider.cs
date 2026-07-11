@@ -49,19 +49,19 @@ public sealed class DSA029CodeFixProvider : CodeFixProvider
             diagnostic);
 
         var semanticModel = await context.Document.GetSemanticModelAsync(context.CancellationToken).ConfigureAwait(false);
-        if (semanticModel == null)
-            return;
-
-        var rangeInfo = GetRangeReplacementInfo(propertyDeclaration, semanticModel);
-        if (rangeInfo != null)
+        if (semanticModel != null)
         {
-            var range = rangeInfo.Value;
-            context.RegisterCodeFix(
-                CodeAction.Create(
-                    title: $"Replace with [Range(1, {range.TypeKeywordText}.MaxValue)]",
-                    createChangedDocument: ct => ReplaceWithRangeAttributeAsync(context.Document, propertyDeclaration, range.TypeKeyword, ct),
-                    equivalenceKey: DSA029Analyzer.DiagnosticId + ".Range"),
-                diagnostic);
+            var rangeInfo = GetRangeReplacementInfo(propertyDeclaration, semanticModel);
+            if (rangeInfo != null)
+            {
+                var range = rangeInfo.Value;
+                context.RegisterCodeFix(
+                    CodeAction.Create(
+                        title: $"Replace with [Range(1, {range.TypeKeywordText}.MaxValue)]",
+                        createChangedDocument: ct => ReplaceWithRangeAttributeAsync(context.Document, propertyDeclaration, range.TypeKeyword, ct),
+                        equivalenceKey: DSA029Analyzer.DiagnosticId + ".Range"),
+                    diagnostic);
+            }
         }
 
         ReviewCommentCodeFix.Register(context, diagnostic, propertyDeclaration, DSA029Analyzer.DiagnosticId, nameof(Resources.DSA029ReviewComment));

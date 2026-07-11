@@ -37,59 +37,59 @@ public sealed class DSA005CodeFixProvider : CodeFixProvider
         var node = root.FindNode(diagnosticSpan);
         var method = node as MethodDeclarationSyntax ?? node.AncestorsAndSelf().OfType<MethodDeclarationSyntax>().FirstOrDefault();
 
-        if (method?.Body == null)
-            return;
-
-        var expressions = FindMatchingExpressions(method.Body);
-        var hasExtractableGroup = expressions.GroupBy(BuildKey).Any(g => g.Count() >= 2);
-
-        if (!hasExtractableGroup)
-            return;
-
-        var elapsedTimePairFound = false;
-        var semanticModel = await context.Document.GetSemanticModelAsync(context.CancellationToken).ConfigureAwait(false);
-        if (semanticModel != null)
+        if (method?.Body != null)
         {
-            var pairs = FindElapsedTimePairs(method.Body, semanticModel);
-            if (pairs.Count > 0)
+            var expressions = FindMatchingExpressions(method.Body);
+            var hasExtractableGroup = expressions.GroupBy(BuildKey).Any(g => g.Count() >= 2);
+
+            if (hasExtractableGroup)
             {
-                var dateTimeProp = pairs[0].DateTimeProperty;
-                var typeName = pairs[0].TypeName;
+                var elapsedTimePairFound = false;
+                var semanticModel = await context.Document.GetSemanticModelAsync(context.CancellationToken).ConfigureAwait(false);
+                if (semanticModel != null)
+                {
+                    var pairs = FindElapsedTimePairs(method.Body, semanticModel);
+                    if (pairs.Count > 0)
+                    {
+                        var dateTimeProp = pairs[0].DateTimeProperty;
+                        var typeName = pairs[0].TypeName;
 
-                var stopwatchTitle = dateTimeProp == "UtcNow"
-                    ? $"Replace {typeName}.UtcNow with Stopwatch"
-                    : $"Replace {typeName}.Now with Stopwatch";
+                        var stopwatchTitle = dateTimeProp == "UtcNow"
+                            ? $"Replace {typeName}.UtcNow with Stopwatch"
+                            : $"Replace {typeName}.Now with Stopwatch";
 
-                context.RegisterCodeFix(
-                    CodeAction.Create(
-                        title: stopwatchTitle,
-                        createChangedDocument: ct => ReplaceWithStopwatchAsync(context.Document, method, ct),
-                        equivalenceKey: DSA005Analyzer.DiagnosticId + "_Stopwatch"),
-                    diagnostic);
+                        context.RegisterCodeFix(
+                            CodeAction.Create(
+                                title: stopwatchTitle,
+                                createChangedDocument: ct => ReplaceWithStopwatchAsync(context.Document, method, ct),
+                                equivalenceKey: DSA005Analyzer.DiagnosticId + "_Stopwatch"),
+                            diagnostic);
 
-                var getTimestampTitle = dateTimeProp == "UtcNow"
-                    ? $"Replace {typeName}.UtcNow with Stopwatch.GetTimestamp"
-                    : $"Replace {typeName}.Now with Stopwatch.GetTimestamp";
+                        var getTimestampTitle = dateTimeProp == "UtcNow"
+                            ? $"Replace {typeName}.UtcNow with Stopwatch.GetTimestamp"
+                            : $"Replace {typeName}.Now with Stopwatch.GetTimestamp";
 
-                context.RegisterCodeFix(
-                    CodeAction.Create(
-                        title: getTimestampTitle,
-                        createChangedDocument: ct => ReplaceWithGetTimestampAsync(context.Document, method, ct),
-                        equivalenceKey: DSA005Analyzer.DiagnosticId + "_GetTimestamp"),
-                    diagnostic);
+                        context.RegisterCodeFix(
+                            CodeAction.Create(
+                                title: getTimestampTitle,
+                                createChangedDocument: ct => ReplaceWithGetTimestampAsync(context.Document, method, ct),
+                                equivalenceKey: DSA005Analyzer.DiagnosticId + "_GetTimestamp"),
+                            diagnostic);
 
-                elapsedTimePairFound = true;
+                        elapsedTimePairFound = true;
+                    }
+                }
+
+                if (!elapsedTimePairFound)
+                {
+                    context.RegisterCodeFix(
+                        CodeAction.Create(
+                            title: "Extract to single point-in-time variable",
+                            createChangedDocument: ct => ExtractToVariableAsync(context.Document, method, ct),
+                            equivalenceKey: DSA005Analyzer.DiagnosticId),
+                        diagnostic);
+                }
             }
-        }
-
-        if (!elapsedTimePairFound)
-        {
-            context.RegisterCodeFix(
-                CodeAction.Create(
-                    title: "Extract to single point-in-time variable",
-                    createChangedDocument: ct => ExtractToVariableAsync(context.Document, method, ct),
-                    equivalenceKey: DSA005Analyzer.DiagnosticId),
-                diagnostic);
         }
 
         ReviewCommentCodeFix.Register(

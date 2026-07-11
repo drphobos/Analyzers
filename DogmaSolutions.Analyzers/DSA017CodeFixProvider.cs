@@ -34,29 +34,27 @@ public sealed class DSA017CodeFixProvider : CodeFixProvider
             return;
 
         var semanticModel = await context.Document.GetSemanticModelAsync(context.CancellationToken).ConfigureAwait(false);
-        if (semanticModel == null)
-            return;
+        if (semanticModel != null &&
+            CheckThenActUtils.TryMatchCheckThenAct(ifStatement, out var receiver))
+        {
+            var receiverType = CheckThenActUtils.ResolveReceiverType(receiver, semanticModel);
+            if (receiverType != null)
+            {
+                var typeName = receiverType.Name;
+                var ns = receiverType.ContainingNamespace?.ToDisplayString() ?? string.Empty;
 
-        if (!CheckThenActUtils.TryMatchCheckThenAct(ifStatement, out var receiver))
-            return;
-
-        var receiverType = CheckThenActUtils.ResolveReceiverType(receiver, semanticModel);
-        if (receiverType == null)
-            return;
-
-        var typeName = receiverType.Name;
-        var ns = receiverType.ContainingNamespace?.ToDisplayString() ?? string.Empty;
-
-        var fix = ClassifyFix(typeName, ns, ifStatement);
-        if (fix == FixKind.None)
-            return;
-
-        context.RegisterCodeFix(
-            CodeAction.Create(
-                title: GetFixTitle(fix),
-                createChangedDocument: ct => ApplyFixAsync(context.Document, ifStatement, fix, ct),
-                equivalenceKey: DSA017Analyzer.DiagnosticId + "." + fix),
-            diagnostic);
+                var fix = ClassifyFix(typeName, ns, ifStatement);
+                if (fix != FixKind.None)
+                {
+                    context.RegisterCodeFix(
+                        CodeAction.Create(
+                            title: GetFixTitle(fix),
+                            createChangedDocument: ct => ApplyFixAsync(context.Document, ifStatement, fix, ct),
+                            equivalenceKey: DSA017Analyzer.DiagnosticId + "." + fix),
+                        diagnostic);
+                }
+            }
+        }
 
         ReviewCommentCodeFix.Register(context, diagnostic, node, DSA017Analyzer.DiagnosticId, nameof(Resources.DSA017ReviewComment));
     }

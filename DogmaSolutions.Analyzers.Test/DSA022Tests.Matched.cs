@@ -318,24 +318,6 @@ public partial class DSA022Tests
             "a * b"
         ],
         [
-            "Both operands are literals: 10 * 20 inside loop",
-            @"
-            namespace TestApp
-            {
-                public class MyClass
-                {
-                    public void Test(int[] arr)
-                    {
-                        for (int i = 0; i < arr.Length; i++)
-                        {
-                            arr[i] = {|#0:10 * 20|} + i;
-                        }
-                    }
-                }
-            }",
-            "10 * 20"
-        ],
-        [
             "Const field used unqualified in expression",
             @"
             namespace TestApp
