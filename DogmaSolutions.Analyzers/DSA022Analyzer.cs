@@ -126,7 +126,7 @@ public sealed class DSA022Analyzer : DiagnosticAnalyzer
         }
     }
 
-    private static HashSet<ISymbol> CollectModifiedSymbols(StatementSyntax loopBody, SyntaxNode loopNode, SemanticModel model)
+    internal static HashSet<ISymbol> CollectModifiedSymbols(StatementSyntax loopBody, SyntaxNode loopNode, SemanticModel model)
     {
         var modified = new HashSet<ISymbol>(SymbolEqualityComparer.Default);
 

@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Composition;
 using System.Linq;
@@ -12,12 +11,12 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace DogmaSolutions.Analyzers;
 
-[ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(DSA022CodeFixProvider))]
+[ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(DSA035CodeFixProvider))]
 [Shared]
 // ReSharper disable once InconsistentNaming
-public sealed class DSA022CodeFixProvider : CodeFixProvider
+public sealed class DSA035CodeFixProvider : CodeFixProvider
 {
-    public override ImmutableArray<string> FixableDiagnosticIds => [DSA022Analyzer.DiagnosticId];
+    public override ImmutableArray<string> FixableDiagnosticIds => [DSA035Analyzer.DiagnosticId];
 
     public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
@@ -32,32 +31,32 @@ public sealed class DSA022CodeFixProvider : CodeFixProvider
 
         var expression = root.FindToken(diagnosticSpan.Start).Parent?
             .AncestorsAndSelf()
-            .OfType<BinaryExpressionSyntax>()
-            .FirstOrDefault(b => b.Span == diagnosticSpan);
+            .OfType<InvocationExpressionSyntax>()
+            .FirstOrDefault(inv => inv.Span == diagnosticSpan);
 
         if (expression == null)
             return;
 
         context.RegisterCodeFix(
             CodeAction.Create(
-                title: "Hoist loop-invariant expression",
+                title: "Hoist loop-invariant reflection call",
                 createChangedDocument: ct => HoistExpressionAsync(context.Document, expression, ct),
-                equivalenceKey: DSA022Analyzer.DiagnosticId),
+                equivalenceKey: DSA035Analyzer.DiagnosticId),
             diagnostic);
 
-        ReviewCommentCodeFix.Register(context, diagnostic, expression, DSA022Analyzer.DiagnosticId, nameof(Resources.DSA022ReviewComment));
+        ReviewCommentCodeFix.Register(context, diagnostic, expression, DSA035Analyzer.DiagnosticId, nameof(Resources.DSA035ReviewComment));
     }
 
     private static async Task<Document> HoistExpressionAsync(
         Document document,
-        BinaryExpressionSyntax expression,
+        InvocationExpressionSyntax expression,
         CancellationToken cancellationToken)
     {
         var root = await document.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false);
         if (root == null)
             return document;
 
-        var loopNode = FindContainingLoop(expression);
+        var loopNode = DSA022CodeFixProvider.FindContainingLoop(expression);
         if (loopNode == null)
             return document;
 
@@ -70,20 +69,20 @@ public sealed class DSA022CodeFixProvider : CodeFixProvider
             return document;
 
         var variableName = GenerateVariableName(expression);
-        variableName = ResolveNameConflicts(variableName, loopNode.Parent);
+        variableName = DSA022CodeFixProvider.ResolveNameConflicts(variableName, loopNode.Parent);
 
         var expressionText = SyntaxUtils.NormalizeWhitespace(expression.ToString());
-        var loopBody = GetLoopBody(loopNode);
+        var loopBody = DSA022CodeFixProvider.GetLoopBody(loopNode);
         if (loopBody == null)
             return document;
 
         var newLoop = loopNode;
         for (;;)
         {
-            var body = GetLoopBody(newLoop);
+            var body = DSA022CodeFixProvider.GetLoopBody(newLoop);
             var current = body?.DescendantNodesAndSelf()
-                .OfType<BinaryExpressionSyntax>()
-                .FirstOrDefault(b => SyntaxUtils.NormalizeWhitespace(b.ToString()) == expressionText);
+                .OfType<InvocationExpressionSyntax>()
+                .FirstOrDefault(inv => SyntaxUtils.NormalizeWhitespace(inv.ToString()) == expressionText);
 
             if (current == null)
                 break;
@@ -120,69 +119,28 @@ public sealed class DSA022CodeFixProvider : CodeFixProvider
         return document.WithSyntaxRoot(newRoot);
     }
 
-    internal static SyntaxNode FindContainingLoop(SyntaxNode node)
+    private static string GenerateVariableName(InvocationExpressionSyntax invocation)
     {
-        var current = node.Parent;
-        while (current != null)
+        string methodName = null;
+        string receiverName = null;
+
+        if (invocation.Expression is MemberAccessExpressionSyntax memberAccess)
         {
-            if (current is ForStatementSyntax || current is ForEachStatementSyntax ||
-                current is WhileStatementSyntax || current is DoStatementSyntax)
-                return current;
-            current = current.Parent;
+            methodName = memberAccess.Name.Identifier.ValueText;
+
+            if (memberAccess.Expression is IdentifierNameSyntax receiverId)
+                receiverName = receiverId.Identifier.ValueText;
+            else if (memberAccess.Expression is InvocationExpressionSyntax chainedCall &&
+                     chainedCall.Expression is MemberAccessExpressionSyntax chainedMember)
+                receiverName = chainedMember.Name.Identifier.ValueText;
         }
 
-        return null;
-    }
+        if (receiverName != null && methodName != null)
+            return "hoisted_" + receiverName + "_" + methodName;
 
-    internal static StatementSyntax GetLoopBody(SyntaxNode loopNode)
-    {
-        switch (loopNode)
-        {
-            case ForStatementSyntax forStmt: return forStmt.Statement;
-            case ForEachStatementSyntax forEachStmt: return forEachStmt.Statement;
-            case WhileStatementSyntax whileStmt: return whileStmt.Statement;
-            case DoStatementSyntax doStmt: return doStmt.Statement;
-            default: return null;
-        }
-    }
-
-    private static string GenerateVariableName(BinaryExpressionSyntax expression)
-    {
-        var identifiers = expression.DescendantNodesAndSelf()
-            .OfType<IdentifierNameSyntax>()
-            .Select(id => id.Identifier.ValueText)
-            .ToList();
-
-        if (identifiers.Count >= 2)
-            return "hoisted_" + identifiers[0] + "_" + identifiers[1];
-
-        if (identifiers.Count == 1)
-            return "hoisted_" + identifiers[0];
+        if (methodName != null)
+            return "hoisted_" + methodName;
 
         return "hoisted";
     }
-
-    internal static string ResolveNameConflicts(string baseName, SyntaxNode scope)
-    {
-        if (scope == null)
-            return baseName;
-
-        var existingNames = new HashSet<string>(
-            scope.DescendantNodes()
-                .OfType<VariableDeclaratorSyntax>()
-                .Select(v => v.Identifier.ValueText));
-
-        foreach (var param in scope.DescendantNodes().OfType<ParameterSyntax>())
-            existingNames.Add(param.Identifier.ValueText);
-
-        if (!existingNames.Contains(baseName))
-            return baseName;
-
-        var suffix = 1;
-        while (existingNames.Contains(baseName + suffix))
-            suffix++;
-
-        return baseName + suffix;
-    }
-
 }

@@ -4,7 +4,7 @@
 
 A set of C# Roslyn analyzers, code fixers, and refactorings that catch bugs, design flaws, and security pitfalls at compile time -- before they reach code review or production.
 
-The package currently ships 33 rules across six categories:
+The package currently ships 34 rules across six categories:
 - Design
 - Security
 - Performance
@@ -89,6 +89,7 @@ Every rule is accompanied by the following information and clues:
 | [DSA032](https://github.com/DogmaSolutions/Analyzers/blob/main/docs/rules/DSA032.md) | Code Smell | Avoid duplicated string literals in the same method body | 💡 Suggestion | ✅ | ✅ | ✅ |
 | [DSA033](https://github.com/DogmaSolutions/Analyzers/blob/main/docs/rules/DSA033.md) | Code Smell | File exceeds maximum line count | ⚠ Warning | ✅ | ✅ | ✅ |
 | [DSA034](https://github.com/DogmaSolutions/Analyzers/blob/main/docs/rules/DSA034.md) | Code Smell | Single-type file exceeds maximum line count | ⚠ Warning | ✅ | ✅ | ✅ |
+| [DSA035](https://github.com/DogmaSolutions/Analyzers/blob/main/docs/rules/DSA035.md) | Performance | Hoist loop-invariant reflection call out of loop | ⚠ Warning | ✅ | ✅ | ✅ |
 
 # Refactorings list
 

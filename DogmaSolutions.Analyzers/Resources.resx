@@ -710,4 +710,20 @@ See also MITRE, CWE-397 - Declaration of Throws for Generic Exception (https://c
  * DRY - Don't Repeat Yourself - https://en.wikipedia.org/wiki/Don%27t_repeat_yourself
  */</value>
   </data>
+  <data name="DSA035AnalyzerDescription" xml:space="preserve">
+    <value>A reflection API call (such as GetType(), GetProperty(), GetProperties(), GetMethod(), GetField(), GetCustomAttributes(), or similar) is invoked inside a loop body on a receiver and with arguments that are not modified within the loop, making the result loop-invariant. The reflection call is redundantly executed on every iteration, wasting CPU cycles on identical results. Reflection operations are inherently expensive compared to direct member access: they involve metadata lookups, security checks, and often heap allocations for the returned MemberInfo arrays. In tight loops, these costs compound into significant performance degradation, particularly when the loop operates over large data sets. Hoisting the reflection call to a variable declared before the loop ensures the operation executes only once, regardless of iteration count. In the context of cybersecurity, this relates to CWE-405 (Asymmetric Resource Consumption / Amplification): an attacker who can influence the iteration count of a loop containing unnecessarily repeated reflection calls can amplify the cost of each request, turning a linear-time operation into a practical denial-of-service vector. In the context of IEC 62443 certification, computational efficiency in control loops directly supports FR 7 (Resource Availability) by ensuring that processing resources are not wasted on redundant reflection operations that could be avoided with straightforward code restructuring (https://github.com/DogmaSolutions/Analyzers/blob/main/docs/rules/DSA035.md).</value>
+  </data>
+  <data name="DSA035AnalyzerMessageFormat" xml:space="preserve">
+    <value>The reflection call '{0}' is loop-invariant and can be hoisted before the loop to avoid redundant execution on every iteration.</value>
+  </data>
+  <data name="DSA035AnalyzerTitle" xml:space="preserve">
+    <value>Hoist loop-invariant reflection call out of loop</value>
+  </data>
+  <data name="DSA035ReviewComment" xml:space="preserve">
+    <value>/* [DSA035 / CySec + QA + Performance]: Hoist loop-invariant reflection call out of loop (see: https://github.com/DogmaSolutions/Analyzers/blob/main/docs/rules/DSA035.md)
+ * MITRE, CWE-405: Asymmetric Resource Consumption (Amplification) - https://cwe.mitre.org/data/definitions/405.html
+ * IEC 62443-3-3: System security requirements and security levels - https://webstore.iec.ch/en/publication/7033
+ * Wikipedia: Reflection (computer programming) - https://en.wikipedia.org/wiki/Reflection_(computer_programming)
+ */</value>
+  </data>
 </root>
