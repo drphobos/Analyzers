@@ -89,6 +89,7 @@ public sealed class DSA035Analyzer : DiagnosticAnalyzer
             return;
 
         var modifiedSymbols = DSA022Analyzer.CollectModifiedSymbols(body, loopNode, context.SemanticModel);
+        CollectLambdaParameters(body, context.SemanticModel, modifiedSymbols);
 
         foreach (var invocation in body.DescendantNodes().OfType<InvocationExpressionSyntax>())
         {
@@ -141,6 +142,48 @@ public sealed class DSA035Analyzer : DiagnosticAnalyzer
         }
 
         return false;
+    }
+
+    private static void CollectLambdaParameters(SyntaxNode body, SemanticModel model, HashSet<ISymbol> symbols)
+    {
+        foreach (var node in body.DescendantNodes())
+        {
+            switch (node)
+            {
+                case ParenthesizedLambdaExpressionSyntax lambda:
+                    foreach (var param in lambda.ParameterList.Parameters)
+                    {
+                        var sym = model.GetDeclaredSymbol(param);
+                        if (sym != null)
+                            symbols.Add(sym);
+                    }
+                    break;
+
+                case SimpleLambdaExpressionSyntax simple:
+                    var simpleSym = model.GetDeclaredSymbol(simple.Parameter);
+                    if (simpleSym != null)
+                        symbols.Add(simpleSym);
+                    break;
+
+                case AnonymousMethodExpressionSyntax anon when anon.ParameterList != null:
+                    foreach (var param in anon.ParameterList.Parameters)
+                    {
+                        var sym = model.GetDeclaredSymbol(param);
+                        if (sym != null)
+                            symbols.Add(sym);
+                    }
+                    break;
+
+                case LocalFunctionStatementSyntax localFunc:
+                    foreach (var param in localFunc.ParameterList.Parameters)
+                    {
+                        var sym = model.GetDeclaredSymbol(param);
+                        if (sym != null)
+                            symbols.Add(sym);
+                    }
+                    break;
+            }
+        }
     }
 
     private static bool IsReflectionInvocation(InvocationExpressionSyntax invocation, SemanticModel model)

@@ -585,6 +585,124 @@ public partial class DSA035Tests
                 }
             }"
         ],
+
+        // ── Lambda/delegate/local-function parameter inside outer loop ─
+
+        [
+            "GetType() on lambda parameter inside outer foreach loop",
+            @"
+            using System;
+            using System.Threading;
+            using System.Threading.Tasks;
+            using System.Collections.Concurrent;
+            using System.Collections.Generic;
+            namespace TestApp
+            {
+                public interface IProcessor
+                {
+                    Task<List<string>> ProcessAsync(string target, CancellationToken ct);
+                }
+                public class MyClass
+                {
+                    private readonly List<IProcessor> _processors = new();
+                    public async Task RunAsync(List<string> targets, CancellationToken cancellationToken)
+                    {
+                        foreach (var target in targets)
+                        {
+                            var results = new ConcurrentBag<string>();
+                            await Parallel.ForEachAsync(
+                                _processors,
+                                cancellationToken,
+                                async (processor, ct) =>
+                                {
+                                    try
+                                    {
+                                        var found = await processor.ProcessAsync(target, ct).ConfigureAwait(false);
+                                        foreach (var item in found)
+                                        {
+                                            results.Add(item);
+                                        }
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        Console.WriteLine(processor.GetType().Name + "": "" + ex.Message);
+                                    }
+                                });
+                        }
+                    }
+                }
+            }"
+        ],
+        [
+            "GetType() on simple lambda parameter inside for loop",
+            @"
+            using System;
+            using System.Collections.Generic;
+            using System.Linq;
+            namespace TestApp
+            {
+                public class MyClass
+                {
+                    public void Test(List<List<object>> batches)
+                    {
+                        for (int i = 0; i < batches.Count; i++)
+                        {
+                            batches[i].ForEach(item =>
+                            {
+                                var t = item.GetType();
+                            });
+                        }
+                    }
+                }
+            }"
+        ],
+        [
+            "GetType() on anonymous method parameter inside while loop",
+            @"
+            using System;
+            using System.Collections.Generic;
+            namespace TestApp
+            {
+                public class MyClass
+                {
+                    public void Test(List<object> items)
+                    {
+                        int i = 0;
+                        while (i < 10)
+                        {
+                            items.ForEach(delegate(object item)
+                            {
+                                var t = item.GetType();
+                            });
+                            i++;
+                        }
+                    }
+                }
+            }"
+        ],
+        [
+            "GetType() on local function parameter inside foreach loop",
+            @"
+            using System;
+            using System.Collections.Generic;
+            namespace TestApp
+            {
+                public class MyClass
+                {
+                    public void Test(List<string> names)
+                    {
+                        foreach (var name in names)
+                        {
+                            void ProcessItem(object item)
+                            {
+                                var t = item.GetType();
+                            }
+                            ProcessItem(name);
+                        }
+                    }
+                }
+            }"
+        ],
     ];
 
     [TestMethod]
